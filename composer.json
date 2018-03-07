@@ -1,0 +1,44 @@
+{
+    "name": "bluestar/payments-sdk-php",
+    "version": "1.0.0-rc1",
+    "description": "The PHP client library for the Blue Star Pay API",
+    "keywords": ["bluestarsports", "bluestarpay", "bluestar", "payments", "api"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Blue Star Pay Developers",
+            "email": "bsp-developers@bluestarsports.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "php-curl-class/php-curl-class": "^7.2"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "*",
+        "phpunit/phpunit": "^6.2",
+        "mockery/mockery": "~0.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "BlueStar\\Payments\\": "lib"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+           "Test\\": "tests/lib/"
+        },
+        "classmap": [
+            "tests/"
+        ]
+    },
+    "scripts": {
+        "lint" : [
+          "@lint:syntax",
+          "@lint:cs"
+        ],
+        "lint:fix" : "@php vendor/bin/phpcbf --standard=ruleset.xml --ignore=vendor/ --colors ./src",
+        "lint:syntax" : "find . -name '*.php' ! -path './vendor/*' -print0 | xargs -0 -n 1 -P 4 php -l | grep -v 'No syntax errors' || true",
+        "lint:cs" : "@php vendor/bin/phpcs --standard=ruleset.xml --ignore=vendor/ --colors ./src"
+    }
+}
