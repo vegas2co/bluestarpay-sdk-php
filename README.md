@@ -53,7 +53,7 @@ require_once('vendor/autoload.php');
 ### Manual Installation
 
 If you do not wish to use Composer, you can download the
-[latest release](https://gitlab.com/bluestarsports/bsp/bluestarpay-sdk-php/releases). Then, to use the bindings,
+[latest release](https://github.com/blue-star-sports/bluestarpay-sdk-php/releases). Then, to use the bindings,
 include the `payments-sdk.php` file.
 
 ```php
@@ -112,7 +112,7 @@ $creditCard = (new BlueStar\Payments\Structures\Account())
 ```php
 $bankAccount = (new BlueStar\Payments\Structures\Account())
     ->setSavePaymentMethod($trueOrFalse)
-    ->setType(BlueStar\Payments\AccountTypes::CHECKING) // SAVINGS 
+    ->setType(BlueStar\Payments\AccountTypes::CHECKING) // SAVINGS
     ->setNumber($accountNumber)
     ->setRoutingNumber($routingNumber);
 ```
@@ -239,7 +239,7 @@ Or to run an individual test file:
 
 ## Support
 
-- [https://developer.bluestarpay.com](https://developer.bluestarpay.com)
+- [https://developer.bluestarpay.com/docs](https://developer.bluestarpay.com/docs)
 - [stackoverflow](http://stackoverflow.com/questions/tagged/bluestarpay)
 
 ## Contributing Guidelines
