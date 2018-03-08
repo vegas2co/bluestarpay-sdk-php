@@ -60,6 +60,9 @@ include the `payments-sdk.php` file.
 require_once('/path/to/bluestar/payments-sdk-php/lib/payments-sdk.php');
 ```
 
+You will also need to download the dependencies and manually include them as well. It is
+**strongly** recommended that you use Composer.
+
 ## Instantiating the SDK
 
 ```php
