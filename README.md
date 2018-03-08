@@ -1,16 +1,16 @@
-# Blue Star Pay(TM) - Payments SDK for PHP
+# Blue Star Pay™ - Payments SDK for PHP
 
-[![Latest Stable Version](https://poser.pugx.org/bluestar/payments-sdk-php/v/stable.svg)](https://packagist.org/packages/bluestar/payments-sdk-php)
 [![Total Downloads](https://poser.pugx.org/bluestar/payments-sdk-php/downloads.svg)](https://packagist.org/packages/bluestar/payments-sdk-php)
+[![Latest Stable Version](https://poser.pugx.org/bluestar/payments-sdk-php/v/stable.svg)](https://packagist.org/packages/bluestar/payments-sdk-php)
 [![License](https://poser.pugx.org/bluestar/payments-sdk-php/license.svg)](https://packagist.org/packages/bluestar/payments-sdk-php)
 
-The Blue Star Pay Payments SDK for PHP is an open source library to interact
-with the Blue Star Pay API through your PHP application. The library interacts
-with Blue Star Pays's [JSON API](https://developer.bluestarpay.com/docs).
+The Blue Star Pay Payments SDK for PHP is an open source library through which your
+PHP application can easily interact with the
+[Blue Star Pay API](https://developer.bluestarpay.com/docs).
 
-**Note:** This version uses Blue Star Pay API v1. There are substantial differences
-between this version of the client library and versions after it. Please be careful
-when upgrading.
+**Note:** This release utilizes Blue Star Pay API v1. There are substantial differences
+between this version of the client library and subsequent versions. Please be mindful of
+this when upgrading.
 
 ## Requirements
 
