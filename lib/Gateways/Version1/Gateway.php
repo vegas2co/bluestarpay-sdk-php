@@ -28,6 +28,7 @@ class Gateway extends Gateways\Gateway
     use Transforms\Requests\Structures\CreditTransform;
     use Transforms\Requests\Structures\MerchantLimitsTransform;
     use Transforms\Requests\Structures\MerchantLinkTransform;
+    use Transforms\Requests\Structures\ScheduledTransaction;
 
     use Transforms\Responses\JSONTransform;
     use Transforms\Responses\ErrorTransform;
@@ -43,6 +44,7 @@ class Gateway extends Gateways\Gateway
     use Transforms\Responses\MerchantRatesTransform;
     use Transforms\Responses\MerchantLimitsTransform;
     use Transforms\Responses\MerchantLinkTransform;
+    use Transforms\Responses\ScheduledTransaction;
 
     protected $application              = 'PaymentSystem';
     protected $apiVersion               = '1.0.0';
@@ -50,12 +52,13 @@ class Gateway extends Gateways\Gateway
     protected $createPaymentMethodsURL  = 'api/paymethods';
     protected $paymentsURL              = 'api/payments';
     protected $merchantRatesURL         = 'api/merchants/rates';
-    protected $merchantLimits           = 'api/merchants/limits';
-    protected $merchantLink             = 'api/merchants/link';
+    protected $merchantLimitsURL        = 'api/merchants/limits';
+    protected $merchantLinkURL          = 'api/merchants/link';
+    protected $scheduledTransactionURL  = 'api/scheduled-transactions';
 
     protected function execute(&$transaction, $method = 'post')
     {
-        $transaction->request()->rawBody(json_encode($transaction->request()->body()), JSON_UNESCAPED_SLASHES);
+        $transaction->request()->rawBody(json_encode($transaction->request()->body(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 
         $this->requestHeaders($transaction->request());
         $this->requestHash($transaction->request());
@@ -66,16 +69,19 @@ class Gateway extends Gateways\Gateway
 
         $this->sendRequest($transaction, $method);
 
-        // Transform the response
         $this->responseJSON($transaction->response());
         $this->responseError($transaction->response());
-        $this->responseV1($transaction->response());
 
-        $transaction->response()->rawBody(json_encode($transaction->response()->body()));
+        if (! empty($transaction->response()->body())) {
+            // Transform the response
+            $this->responseV1($transaction->response());
 
-        $this->responseHash($transaction->response());
+            $transaction->response()->rawBody(json_encode($transaction->response()->body()));
 
-        $transaction->response()->lock();
+            $this->responseHash($transaction->response());
+
+            $transaction->response()->lock();
+        }
     }
 
     public function createToken($transaction)
@@ -83,7 +89,7 @@ class Gateway extends Gateways\Gateway
         $this->requestCreatePaymentMethod($transaction);
 
         $transaction->request()->endpoint($this->createTokenURL);
-        $transaction->request()->rawBody(json_encode($transaction->request()->body()), JSON_UNESCAPED_SLASHES);
+        $transaction->request()->rawBody(json_encode($transaction->request()->body(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 
         $this->requestPublicAuth($transaction->request());
         $this->requestJSON($transaction->request());
@@ -186,10 +192,10 @@ class Gateway extends Gateways\Gateway
         return $transaction->object();
     }
 
-    public function credit($transaction) 
+    public function credit($transaction)
     {
         $this->requestCredit($transaction);
-        
+
         $this->executePayment($transaction);
 
         $this->responseCredit($transaction);
@@ -224,7 +230,7 @@ class Gateway extends Gateways\Gateway
 
     public function merchantLimits($transaction)
     {
-        $transaction->request()->endpoint($this->merchantLimits);
+        $transaction->request()->endpoint($this->merchantLimitsURL);
         $transaction->request()->hashKey($transaction->object()->hashKey());
 
         $transaction->response()->hashKey($transaction->object()->hashKey());
@@ -240,7 +246,7 @@ class Gateway extends Gateways\Gateway
 
     public function generateMerchantLink($transaction)
     {
-        $transaction->request()->endpoint($this->merchantLink);
+        $transaction->request()->endpoint($this->merchantLinkURL);
         $transaction->request()->hashKey($this->privateKey);
 
         $transaction->response()->hashKey($this->privateKey);
@@ -250,6 +256,48 @@ class Gateway extends Gateways\Gateway
         $this->execute($transaction);
 
         $this->responseMerchantLink($transaction);
+
+        return $transaction->object();
+    }
+
+    public function createScheduledTransaction($transaction)
+    {
+        $this->requestScheduledTransaction($transaction);
+
+        $transaction->request()->endpoint($this->scheduledTransactionURL);
+        $transaction->request()->hashKey($transaction->object()->merchant()->hashKey());
+
+        $transaction->response()->hashKey($this->privateKey);
+
+        $this->execute($transaction);
+
+        $this->responseScheduledTransaction($transaction);
+
+        return $transaction->object();
+    }
+
+    public function getScheduledTransaction($transaction)
+    {
+        $transaction->request()->endpoint($this->scheduledTransactionURL . '/' . $transaction->object()->id());
+        $transaction->request()->hashKey($this->privateKey);
+
+        $transaction->response()->hashKey($this->privateKey);
+
+        $this->execute($transaction, 'GET');
+
+        $this->responseGetScheduledTransaction($transaction);
+
+        return $transaction->object();
+    }
+
+    public function deleteScheduledTransaction($transaction)
+    {
+        $transaction->request()->endpoint($this->scheduledTransactionURL . '/' . $transaction->object()->id());
+        $transaction->request()->hashKey($this->privateKey);
+
+        $transaction->response()->hashKey($this->privateKey);
+
+        $this->execute($transaction, 'DELETE');
 
         return $transaction->object();
     }

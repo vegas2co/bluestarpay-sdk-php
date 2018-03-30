@@ -8,8 +8,15 @@ final class AccountHolderTest extends StructureTestCase
 {
     protected $struct = BlueStar\Payments\Structures\AccountHolder::class;
 
-    public function test_name() { $this->full( "name", "string", false); }
-    public function test_billingAddress() { $this->full( "billingAddress", Structures\Address::class, true); }
+    public function test_name()
+    {
+        $this->full( "name", "string", false);
+    }
+
+    public function test_billingAddress()
+    {
+        $this->full( "billingAddress", Structures\Address::class, true);
+    }
 
     // Name
     // Billing Address
@@ -18,5 +25,4 @@ final class AccountHolderTest extends StructureTestCase
     // - City
     // - State
     // - Zip
-
 }

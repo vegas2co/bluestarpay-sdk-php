@@ -33,7 +33,17 @@ class CurlProvider implements CurlProviderInterface
 
     public function post($url, array $body)
     {
-        return $this->curl->post($url,$body);
+        return $this->curl->post($url, $body);
+    }
+
+    public function get($url, array $body)
+    {
+        return $this->curl->get($url, $body);
+    }
+
+    public function delete($url)
+    {
+        return $this->curl->delete($url);
     }
 
     public function setHeader($key, $value)

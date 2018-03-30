@@ -213,6 +213,61 @@ $refund = $bluestarpay->processTransaction(
 );
 ```
 
+## Generating and Processing Scheduled Transactions
+Set the Scheduled At date field for the transaction
+```php
+$scheduledAt = new DateTime('2018-03-20');
+$scheduledAt->setTimezone(new DateTimeZone('America/New_York'));
+```
+
+#### Schedule Transaction with Payment Method
+```php
+$paymentMethod = (new \BlueStar\Payments\Structures\PaymentMethod())
+    ->setID(50);
+
+$scheduledTransaction = BlueStar\Payments\Factories\ScheduleTransaction::withPaymentMethod(
+    BlueStar\Payments\Structures\PaymentMethod $paymentMethod,
+    BlueStar\Payments\Structures\Merchant $merchant,
+    $amountInCents,
+    \DateTime $scheduledAt,
+    BlueStar\Payments\Structures\Currency $optionalCurrencyOverride = null,
+    BlueStar\Payments\Structures\Split $split = null
+);
+$scheduledTransaction = $bluestarpay->processTransaction($scheduledTransaction);
+```
+
+#### Schedule Transaction with Payment Method Token
+```php
+$token = $bluestarpay->createTokenWithAccountDetails(
+    BlueStar\Payments\Structures\Account() $account,
+    BlueStar\Payments\Structures\AccountHolder() $accountHolder,
+    BlueStar\Payments\Structures\Customer $optionalCustomer = null
+);
+$scheduledTransaction = BlueStar\Payments\Factories\ScheduleTransaction::withToken(
+    BlueStar\Payments\Structures\Token $token,
+    BlueStar\Payments\Structures\Merchant $merchant,
+    $amountInCents,
+    \DateTime $scheduledAt,
+    BlueStar\Payments\Structures\Currency $optionalCurrencyOverride = null,
+    BlueStar\Payments\Structures\Split $split = null
+);
+$scheduledTransaction = $bluestarpay->processTransaction($scheduledTransaction);
+```
+
+#### Schedule Transaction with Account Details
+```php
+$scheduledTransaction = BlueStar\Payments\Factories\ScheduleTransaction::withAccountDetails(
+    BlueStar\Payments\Structures\Account $account,
+    BlueStar\Payments\Structures\AccountHolder $accountHolder,
+    BlueStar\Payments\Structures\Merchant $merchant,
+    $amountInCents,
+    \DateTime $scheduledAt,
+    BlueStar\Payments\Structures\Currency $optionalCurrencyOverride = null,
+    BlueStar\Payments\Structures\Split $split = null
+);
+$scheduledTransaction = $bluestarpay->processTransaction($scheduledTransaction);
+```
+
 ## Documentation
 
 Please see https://developer.bluestarpay.com/docs for up-to-date documentation.

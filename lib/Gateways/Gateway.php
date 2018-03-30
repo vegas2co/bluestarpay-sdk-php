@@ -110,6 +110,19 @@ abstract class Gateway
                 );
                 break;
 
+            case 'get':
+                $response = $this->curlProvider->get(
+                    $this->baseURL ."/". $transaction->request()->endpoint(),
+                    $transaction->request()->body()
+                );
+                break;
+
+            case 'delete':
+                $response = $this->curlProvider->delete(
+                    $this->baseURL ."/". $transaction->request()->endpoint()
+                );
+                break;
+
             default:
                 throw new \Exception('Invalid HTTP method selected for request.');
         }
@@ -138,4 +151,8 @@ abstract class Gateway
     abstract public function merchantRates($transaction);
     abstract public function merchantLimits($transaction);
     abstract public function generateMerchantLink($transaction);
+
+    abstract public function createScheduledTransaction($transaction);
+    abstract public function getScheduledTransaction($transaction);
+    abstract public function deleteScheduledTransaction($transaction);
 }

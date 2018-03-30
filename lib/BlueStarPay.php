@@ -135,6 +135,9 @@ class BlueStarPay
             case 'Void':
                 return $this->voidTransaction($transaction, $idempotencyKey);
 
+            case 'ScheduledTransaction':
+                return $this->createScheduledTransaction($transaction, $idempotencyKey);
+
             default:
                 throw new \Exception('Unknown Payment type');
         }
@@ -387,10 +390,10 @@ class BlueStarPay
     public function credit(
         Interfaces\Credit  $credit,
                            $idempotencyKey = null
-    ) 
+    )
     {
         $transaction = new Transactions\IdempotentTransaction($credit);
-        
+
         $transaction->idempotencyKey($idempotencyKey);
 
         return $this->gateway->credit($transaction);
@@ -428,7 +431,6 @@ class BlueStarPay
         return $this->gateway->merchantRates($transaction);
     }
 
-
     public function merchantLimits(
         Interfaces\Merchant $merchant,
                             $idempotencyKey = null
@@ -451,5 +453,40 @@ class BlueStarPay
         $transaction->idempotencyKey($idempotencyKey);
 
         return $this->gateway->generateMerchantLink($transaction);
+    }
+    public function createScheduledTransaction(
+        Interfaces\ScheduledTransaction $scheduledTransaction,
+                                        $idempotencyKey = null
+    )
+    {
+        $transaction = new Transactions\IdempotentTransaction($scheduledTransaction);
+
+        $transaction->idempotencyKey($idempotencyKey);
+
+        return $this->gateway->createScheduledTransaction($transaction);
+    }
+
+    public function getScheduledTransaction(
+        Interfaces\ScheduledTransaction $scheduledTransaction,
+                                        $idempotencyKey = null
+    )
+    {
+        $transaction = new Transactions\IdempotentTransaction($scheduledTransaction);
+
+        $transaction->idempotencyKey($idempotencyKey);
+
+        return $this->gateway->getScheduledTransaction($transaction);
+    }
+
+    public function deleteScheduledTransaction(
+        Interfaces\ScheduledTransaction $scheduledTransaction,
+                                        $idempotencyKey = null
+    )
+    {
+        $transaction = new Transactions\IdempotentTransaction($scheduledTransaction);
+
+        $transaction->idempotencyKey($idempotencyKey);
+
+        return $this->gateway->deleteScheduledTransaction($transaction);
     }
 }
